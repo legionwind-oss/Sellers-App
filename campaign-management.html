@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>캠페인 관리</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .mgmt-item-info {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      min-width: 0;
+      gap: 4px;
+    }
+    .mgmt-item-info .info-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: white;
+      line-height: 1.3;
+    }
+    .mgmt-item-info .info-subtitle {
+      font-size: 11px;
+      color: var(--text-secondary);
+      font-weight: 400;
+    }
+    .mgmt-item-info .info-summary {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 300;
+      line-height: 1.4;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .mgmt-item-info .info-summary.content-full {
+      white-space: normal;
+      overflow: visible;
+      text-overflow: unset;
+    }
+    .mgmt-date-label {
+      font-size: 11px;
+      color: var(--accent-blue);
+      font-weight: 500;
+    }
+    .mgmt-date {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+    .mgmt-actions {
+      display: flex;
+      gap: 8px;
+    }
+    .mgmt-actions .btn-outline,
+    .mgmt-actions .btn-action-primary {
+      flex: 1;
+      height: 40px;
+      font-size: 13px;
+      font-weight: 600;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .btn-action-primary {
+      background: white;
+      color: black;
+      border: none;
+    }
+    .btn-action-primary:active {
+      background: #e5e5e5;
+    }
+    .guide-toggle-btn {
+      font-size: 11px;
+      color: var(--accent-blue);
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      margin-top: 4px;
+    }
+    .guide-images {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 8px 0;
+    }
+    .guide-images::-webkit-scrollbar { display: none; }
+    .guide-img-item {
+      width: 64px;
+      height: 64px;
+      border-radius: 6px;
+      background: #e5e5e5;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .guide-img-item span {
+      font-size: 9px;
+      color: var(--bg-muted);
+      font-weight: 700;
+    }
+    .guide-link {
+      font-size: 11px;
+      color: var(--accent-blue);
+      font-weight: 500;
+      text-decoration: underline;
+      display: inline-block;
+      margin-top: 4px;
+    }
+    .guide-section {
+      display: none;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .guide-section.show {
+      display: flex;
+    }
+    .reward-badge {
+      font-size: 14px;
+      font-weight: 700;
+      color: #4ade80;
+      margin-top: 4px;
+    }
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 20px;
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 400;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <div id="appHeader"></div>
+    <main class="app-main">
+
+      <div class="tab-bar" id="campaignTabs">
+        <button class="tab-count-item active" data-status="신청">
+          <span class="tab-count" id="countApply">2</span>
+          <span class="tab-label">신청</span>
+        </button>
+        <button class="tab-count-item" data-status="선정">
+          <span class="tab-count" id="countSelect">2</span>
+          <span class="tab-label">선정</span>
+        </button>
+        <button class="tab-count-item" data-status="배송">
+          <span class="tab-count" id="countShip">1</span>
+          <span class="tab-label">배송</span>
+        </button>
+        <button class="tab-count-item" data-status="제출">
+          <span class="tab-count" id="countSubmit">1</span>
+          <span class="tab-label">제출</span>
+        </button>
+        <button class="tab-count-item" data-status="완료">
+          <span class="tab-count" id="countDone">1</span>
+          <span class="tab-label">완료</span>
+        </button>
+      </div>
+
+      <div id="campaignList"></div>
+      <div class="empty-state" id="emptyState">해당 상태의 캠페인이 없습니다.</div>
+
+    </main>
+    <div id="appBottomNav"></div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/common.js"></script>
+  <script>
+  $(function () {
+    var campaigns = [
+      {
+        id: 1, status: '신청',
+        title: '[라센느] 여름 칠부 청바지 캠페인 모집',
+        subtitle: '칠부 여름 청바지 블랙/S',
+        dateLabel: '캠페인 승인 대기중',
+        date: '2026/04/16'
+      },
+      {
+        id: 2, status: '신청',
+        title: '[라센느] 여름 칠부 청바지 캠페인 모집',
+        subtitle: '칠부 여름 청바지 블랙/S',
+        dateLabel: '캠페인 승인 대기중',
+        date: '2026/04/16'
+      },
+      {
+        id: 3, status: '선정',
+        title: '[라센느] 여름 칠부 청바지 캠페인 모집',
+        subtitle: '칠부 여름 청바지 블랙/S',
+        dateLabel: '2026/04/22 까지 응답',
+        date: '',
+        contentSummary: '사진 찍으실때 주의사항: 자연광에서 촬영, 제품 태그 보이게, 전신 착용샷 포함, 배경 깔끔하게 정리',
+        expanded: false
+      },
+      {
+        id: 4, status: '선정',
+        title: '[라센느] 여름 칠부 청바지 캠페인 모집',
+        subtitle: '칠부 여름 청바지 블랙/S',
+        dateLabel: '2026/04/22 까지 응답',
+        date: '',
+        contentSummary: '사진 찍으실때 주의사항: 자연광에서 촬영, 제품 태그 보이게, 전신 착용샷 포함, 배경 깔끔하게 정리',
+        expanded: true
+      },
+      {
+        id: 5, status: '배송',
+        title: '[라센느] 여름 칠부 청바지 캠페인 모집',
+        subtitle: '칠부 여름 청바지 블랙/S',
+        dateLabel: '캠페인에 선정되었습니다.',
+        date: ''
+      },
+      {
+        id: 6, status: '제출',
+        title: '[라센느] 여름 칠부 청바지 캠페인 모집',
+        subtitle: '칠부 여름 청바지 블랙/S',
+        dateLabel: '2026/05/21 까지 제출',
+        date: ''
+      },
+      {
+        id: 7, status: '완료',
+        title: '[라센느] 여름 칠부 청바지 캠페인 모집',
+        subtitle: '칠부 여름 청바지 블랙/S',
+        dateLabel: '캠페인 완료',
+        date: '',
+        reward: '+30,000'
+      }
+    ];
+
+    var currentStatus = '신청';
+
+    function updateCounts() {
+      var counts = { '신청': 0, '선정': 0, '배송': 0, '제출': 0, '완료': 0 };
+      campaigns.forEach(function (c) { counts[c.status]++; });
+      $('#countApply').text(counts['신청']);
+      $('#countSelect').text(counts['선정']);
+      $('#countShip').text(counts['배송']);
+      $('#countSubmit').text(counts['제출']);
+      $('#countDone').text(counts['완료']);
+    }
+
+    function buildGuideSection(c) {
+      if (c.status !== '선정') return '';
+      var showClass = c.expanded ? ' show' : '';
+      var toggleText = c.expanded ? '가이드 닫기' : '가이드 전체보기';
+      var html = '<button class="guide-toggle-btn" data-id="' + c.id + '">' + toggleText + '</button>';
+      html += '<div class="guide-section' + showClass + '" data-guide-id="' + c.id + '">';
+      html += '<div class="guide-images">';
+      for (var i = 1; i <= 5; i++) {
+        html += '<div class="guide-img-item"><span>IMG ' + i + '</span></div>';
+      }
+      html += '</div>';
+      html += '<a href="#" class="guide-link">가이드 상세 링크 보기</a>';
+      html += '</div>';
+      return html;
+    }
+
+    function buildActions(c) {
+      var html = '<div class="mgmt-actions">';
+      switch (c.status) {
+        case '신청':
+          html += '<button class="btn-outline btn-cancel" data-id="' + c.id + '">취소하기</button>';
+          break;
+        case '선정':
+          html += '<button class="btn-outline btn-reject" data-id="' + c.id + '">거절하기</button>';
+          html += '<button class="btn-action-primary btn-accept" data-id="' + c.id + '">수락하기</button>';
+          break;
+        case '배송':
+          html += '<button class="btn-outline btn-track" data-id="' + c.id + '">배송조회</button>';
+          html += '<button class="btn-action-primary btn-receive" data-id="' + c.id + '">상품수령</button>';
+          break;
+        case '제출':
+          html += '<button class="btn-action-primary btn-submit-content" data-id="' + c.id + '" style="width:100%">콘텐츠 제출</button>';
+          break;
+        case '완료':
+          break;
+      }
+      html += '</div>';
+      return html;
+    }
+
+    function renderList() {
+      var filtered = campaigns.filter(function (c) { return c.status === currentStatus; });
+      if (filtered.length === 0) {
+        $('#campaignList').html('');
+        $('#emptyState').show();
+        return;
+      }
+      $('#emptyState').hide();
+      var html = '';
+      filtered.forEach(function (c) {
+        html += '<div class="mgmt-item" data-item-id="' + c.id + '">';
+        html += '<div class="mgmt-item-header">';
+        html += '<span class="mgmt-date-label">' + c.dateLabel + '</span>';
+        if (c.date) html += '<span class="mgmt-date">' + c.date + '</span>';
+        html += '</div>';
+        html += '<div class="mgmt-item-body">';
+        html += '<div class="mgmt-item-thumb"><div class="thumb-placeholder"><span>IMG</span></div></div>';
+        html += '<div class="mgmt-item-info">';
+        html += '<div class="info-title">' + c.title + '</div>';
+        html += '<div class="info-subtitle">' + c.subtitle + '</div>';
+        if (c.contentSummary) {
+          var summaryClass = c.expanded ? ' content-full' : '';
+          html += '<div class="info-summary' + summaryClass + '" data-summary-id="' + c.id + '">' + c.contentSummary + '</div>';
+        }
+        if (c.reward) {
+          html += '<div class="reward-badge">' + c.reward + '</div>';
+        }
+        html += buildGuideSection(c);
+        html += '</div>';
+        html += '</div>';
+        html += buildActions(c);
+        html += '</div>';
+      });
+      $('#campaignList').html(html);
+    }
+
+    $('#campaignTabs').on('click', '.tab-count-item', function () {
+      $('#campaignTabs .tab-count-item').removeClass('active');
+      $(this).addClass('active');
+      currentStatus = $(this).data('status');
+      renderList();
+    });
+
+    $('#campaignList').on('click', '.guide-toggle-btn', function () {
+      var id = $(this).data('id');
+      var $guide = $('[data-guide-id="' + id + '"]');
+      var $summary = $('[data-summary-id="' + id + '"]');
+      if ($guide.hasClass('show')) {
+        $guide.removeClass('show');
+        $summary.removeClass('content-full');
+        $(this).text('가이드 전체보기');
+        campaigns.forEach(function (c) { if (c.id === id) c.expanded = false; });
+      } else {
+        $guide.addClass('show');
+        $summary.addClass('content-full');
+        $(this).text('가이드 닫기');
+        campaigns.forEach(function (c) { if (c.id === id) c.expanded = true; });
+      }
+    });
+
+    $('#campaignList').on('click', '.btn-cancel', function () {
+      var id = $(this).data('id');
+      campaigns = campaigns.filter(function (c) { return c.id !== id; });
+      updateCounts();
+      renderList();
+    });
+
+    $('#campaignList').on('click', '.btn-reject', function () {
+      var id = $(this).data('id');
+      campaigns = campaigns.filter(function (c) { return c.id !== id; });
+      updateCounts();
+      renderList();
+    });
+
+    $('#campaignList').on('click', '.btn-accept', function () {
+      var id = $(this).data('id');
+      campaigns.forEach(function (c) { if (c.id === id) { c.status = '배송'; c.dateLabel = '배송 준비중'; } });
+      updateCounts();
+      renderList();
+    });
+
+    $('#campaignList').on('click', '.btn-receive', function () {
+      var id = $(this).data('id');
+      campaigns.forEach(function (c) { if (c.id === id) { c.status = '제출'; c.dateLabel = '콘텐츠 제출 대기중'; } });
+      updateCounts();
+      renderList();
+    });
+
+    $('#campaignList').on('click', '.btn-submit-content', function () {
+      var id = $(this).data('id');
+      campaigns.forEach(function (c) { if (c.id === id) { c.status = '완료'; c.dateLabel = '캠페인 완료'; c.reward = '+30,000'; } });
+      updateCounts();
+      renderList();
+    });
+
+    updateCounts();
+    renderList();
+  });
+  </script>
+</body>
+</html>

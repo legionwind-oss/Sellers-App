@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>팔로잉 브랜드</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .brand-list {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .brand-card {
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .brand-card .brand-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: #333;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      font-size: 9px;
+      font-weight: 700;
+    }
+    .brand-card .brand-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      min-width: 0;
+    }
+    .brand-card .brand-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: white;
+    }
+    .brand-card .brand-name .brand-en {
+      font-weight: 400;
+      color: var(--text-secondary);
+      margin-left: 4px;
+      font-size: 11px;
+    }
+    .brand-card .brand-msg {
+      font-size: 10px;
+      color: #AAAAAA;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .brand-card .btn-following {
+      background: #333;
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-size: 11px;
+      font-weight: 700;
+      color: white;
+      flex-shrink: 0;
+      transition: background 0.15s;
+    }
+    .brand-card .btn-following:hover {
+      background: #444;
+    }
+    .brand-card .btn-following.unfollowed {
+      background: white;
+      color: black;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <div id="appHeader"></div>
+    <main class="app-main">
+      <div class="brand-list">
+        <div class="brand-card">
+          <div class="brand-avatar">IMG</div>
+          <div class="brand-info">
+            <span class="brand-name">마뗑킴 <span class="brand-en">Matin Kim</span></span>
+            <span class="brand-msg">2026 썸머 컬렉션 오픈</span>
+          </div>
+          <button class="btn-following">팔로잉</button>
+        </div>
+
+        <div class="brand-card">
+          <div class="brand-avatar">IMG</div>
+          <div class="brand-info">
+            <span class="brand-name">앤더슨벨 <span class="brand-en">Andersson Bell</span></span>
+            <span class="brand-msg">신규 상품 무료배송 혜택</span>
+          </div>
+          <button class="btn-following">팔로잉</button>
+        </div>
+
+        <div class="brand-card">
+          <div class="brand-avatar">IMG</div>
+          <div class="brand-info">
+            <span class="brand-name">오호스 <span class="brand-en">OJOS</span></span>
+            <span class="brand-msg">여름 시즌 오프 최대 30% 할인</span>
+          </div>
+          <button class="btn-following">팔로잉</button>
+        </div>
+      </div>
+    </main>
+    <div id="appBottomNav"></div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/common.js"></script>
+  <script>
+    $(function () {
+      $('.btn-following').on('click', function () {
+        if ($(this).hasClass('unfollowed')) {
+          $(this).removeClass('unfollowed').text('팔로잉');
+        } else {
+          $(this).addClass('unfollowed').text('팔로우');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

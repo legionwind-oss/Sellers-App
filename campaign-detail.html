@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>캠페인</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .detail-hero-text {
+      font-size: 24px;
+      color: #737373;
+      font-weight: 700;
+      letter-spacing: 2px;
+    }
+
+    .brand-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px;
+    }
+    .brand-card-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand-logo {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--bg-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      flex-shrink: 0;
+    }
+    .brand-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: white;
+    }
+    .btn-follow {
+      padding: 6px 16px;
+      border-radius: 9999px;
+      border: 1px solid var(--border-muted);
+      font-size: 12px;
+      font-weight: 600;
+      color: white;
+      background: transparent;
+      transition: all 0.15s;
+    }
+    .btn-follow:hover {
+      background: var(--bg-elevated);
+    }
+    .btn-follow.following {
+      background: white;
+      color: black;
+      border-color: white;
+    }
+
+    .countdown-bar {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 16px;
+      background: var(--bg-card);
+      border-top: 1px solid var(--border-default);
+      border-bottom: 1px solid var(--border-default);
+    }
+    .countdown-unit {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+    }
+    .countdown-value {
+      font-size: 22px;
+      font-weight: 800;
+      color: white;
+      font-variant-numeric: tabular-nums;
+      min-width: 36px;
+      text-align: center;
+    }
+    .countdown-label {
+      font-size: 9px;
+      color: var(--text-muted);
+      font-weight: 500;
+      text-transform: uppercase;
+    }
+    .countdown-sep {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--text-muted);
+      align-self: flex-start;
+    }
+
+    .detail-title-wrap {
+      padding: 20px 16px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .detail-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .detail-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: white;
+      line-height: 1.4;
+    }
+    .btn-share {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      flex-shrink: 0;
+      border-radius: 50%;
+      background: var(--bg-elevated);
+      transition: background 0.15s;
+    }
+    .btn-share:hover {
+      background: var(--bg-muted);
+    }
+    .detail-subtitle {
+      font-size: 13px;
+      color: var(--text-secondary);
+      font-weight: 400;
+      line-height: 1.5;
+    }
+
+    .detail-info-box {
+      margin: 20px 16px;
+    }
+
+    .mission-section {
+      padding: 0 16px 24px;
+    }
+    .mission-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 12px;
+    }
+    .mission-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .mission-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+    .mission-num {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--bg-elevated);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .dialog-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 8px;
+    }
+    .dialog-desc {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+    .dialog-buttons {
+      display: flex;
+      gap: 8px;
+    }
+    .dialog-buttons .btn-secondary,
+    .dialog-buttons .btn-primary {
+      flex: 1;
+      height: 46px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <div id="appHeader"></div>
+    <main class="app-main detail-page">
+
+      <!-- Detail Hero -->
+      <div class="detail-hero">
+        <span class="detail-hero-text">IMG</span>
+      </div>
+
+      <!-- Brand Card -->
+      <div class="brand-card">
+        <div class="brand-card-left">
+          <div class="brand-logo">LOGO</div>
+          <span class="brand-name">LA SCENE</span>
+        </div>
+        <button class="btn-follow" id="btnFollow">팔로우</button>
+      </div>
+
+      <!-- Countdown -->
+      <div class="countdown-bar" id="countdownBar">
+        <div class="countdown-unit">
+          <span class="countdown-value" id="cdDays">3</span>
+          <span class="countdown-label">DAYS</span>
+        </div>
+        <span class="countdown-sep">:</span>
+        <div class="countdown-unit">
+          <span class="countdown-value" id="cdHours">14</span>
+          <span class="countdown-label">HOURS</span>
+        </div>
+        <span class="countdown-sep">:</span>
+        <div class="countdown-unit">
+          <span class="countdown-value" id="cdMinutes">42</span>
+          <span class="countdown-label">MIN</span>
+        </div>
+        <span class="countdown-sep">:</span>
+        <div class="countdown-unit">
+          <span class="countdown-value" id="cdSeconds">59</span>
+          <span class="countdown-label">SEC</span>
+        </div>
+      </div>
+
+      <!-- Title -->
+      <div class="detail-title-wrap">
+        <div class="detail-title-row">
+          <h1 class="detail-title">여름 칠부 청바지 캠페인 모집</h1>
+          <button class="btn-share" id="btnShare">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="white" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+          </button>
+        </div>
+        <p class="detail-subtitle">시원한 여름을 위한 필수 아이템, 라센느 칠부 청바지</p>
+      </div>
+
+      <!-- Info Box -->
+      <div class="info-box detail-info-box">
+        <div class="info-row">
+          <span class="info-label">캠페인 리워드</span>
+          <span class="info-value" style="color:var(--accent-purple);font-weight:700;">30,000P</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">신청가능레벨</span>
+          <span class="info-value">BASIC 이상</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">모집인원</span>
+          <span class="info-value">42/10명</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">모집기간</span>
+          <span class="info-value">2026.05.10 ~ 2026.05.20</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">발표일</span>
+          <span class="info-value">2026.05.22</span>
+        </div>
+      </div>
+
+      <!-- Mission -->
+      <div class="mission-section">
+        <h3 class="mission-title">캠페인 미션정보</h3>
+        <div class="mission-list">
+          <div class="mission-item">
+            <span class="mission-num">1</span>
+            <span>제품 수령 후 3일 이내 착용 사진 촬영 (최소 3장 이상)</span>
+          </div>
+          <div class="mission-item">
+            <span class="mission-num">2</span>
+            <span>인스타그램에 지정 해시태그와 함께 피드 업로드</span>
+          </div>
+          <div class="mission-item">
+            <span class="mission-num">3</span>
+            <span>업로드 후 셀러스 앱에서 콘텐츠 URL 제출</span>
+          </div>
+          <div class="mission-item">
+            <span class="mission-num">4</span>
+            <span>게시물 최소 2주간 유지 필수</span>
+          </div>
+        </div>
+      </div>
+
+    </main>
+    <div id="appBottomNav"></div>
+  </div>
+
+  <!-- Bottom Bar -->
+  <div class="detail-bottom-bar">
+    <button class="detail-btn-like like-btn" id="detailLikeBtn">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.04 3 5.5l7 7Z"/></svg>
+    </button>
+    <button class="btn-primary" id="btnApply" style="flex:1;box-shadow:0 8px 20px rgba(0,0,0,.5);">
+      캠페인 신청하기 (5,000P)
+    </button>
+  </div>
+
+  <!-- Apply Dialog -->
+  <div class="dialog-overlay" id="applyDialog">
+    <div class="dialog-box">
+      <div class="dialog-title">캠페인 신청</div>
+      <div class="dialog-desc">5,000P를 사용하여 이 캠페인에 신청하시겠습니까?<br>신청 후 취소 시 포인트가 환불되지 않습니다.</div>
+      <div class="dialog-buttons">
+        <button class="btn-secondary" id="btnCancelApply">취소</button>
+        <button class="btn-primary" id="btnConfirmApply">신청하기</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/common.js"></script>
+  <script>
+  $(function(){
+    /* Follow Toggle */
+    $('#btnFollow').on('click', function(){
+      var $btn = $(this);
+      if ($btn.hasClass('following')) {
+        $btn.removeClass('following').text('팔로우');
+      } else {
+        $btn.addClass('following').text('팔로잉');
+      }
+    });
+
+    /* Countdown Timer: 3d 14h 42m 59s */
+    var totalSeconds = 3 * 86400 + 14 * 3600 + 42 * 60 + 59;
+
+    function updateCountdown() {
+      if (totalSeconds <= 0) {
+        $('#cdDays, #cdHours, #cdMinutes, #cdSeconds').text('0');
+        return;
+      }
+      totalSeconds--;
+      var d = Math.floor(totalSeconds / 86400);
+      var h = Math.floor((totalSeconds % 86400) / 3600);
+      var m = Math.floor((totalSeconds % 3600) / 60);
+      var s = totalSeconds % 60;
+      $('#cdDays').text(d);
+      $('#cdHours').text(h < 10 ? '0' + h : h);
+      $('#cdMinutes').text(m < 10 ? '0' + m : m);
+      $('#cdSeconds').text(s < 10 ? '0' + s : s);
+    }
+    setInterval(updateCountdown, 1000);
+
+    /* Like Button */
+    $('#detailLikeBtn').on('click', function(){
+      toggleLike(this);
+    });
+
+    /* Apply Dialog */
+    $('#btnApply').on('click', function(){
+      $('#applyDialog').addClass('show');
+    });
+    $('#btnCancelApply').on('click', function(){
+      $('#applyDialog').removeClass('show');
+    });
+    $('#btnConfirmApply').on('click', function(){
+      $('#applyDialog').removeClass('show');
+      alert('캠페인이 신청되었습니다!');
+    });
+    $('#applyDialog').on('click', function(e){
+      if (e.target === this) $(this).removeClass('show');
+    });
+
+    /* Share */
+    $('#btnShare').on('click', function(){
+      if (navigator.share) {
+        navigator.share({ title: document.title, url: location.href });
+      }
+    });
+  });
+  </script>
+</body>
+</html>

@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>브랜드</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .brand-tab-bar {
+      display: flex;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .brand-tab-bar .tab-item {
+      flex: 1;
+      padding: 12px 8px;
+      font-size: 13px;
+      font-weight: 700;
+      text-align: center;
+      border-bottom: 2px solid transparent;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .brand-tab-bar .tab-item.active {
+      border-bottom-color: white;
+      color: white;
+    }
+    .filter-area {
+      display: flex;
+      gap: 8px;
+      padding: 12px 16px;
+      overflow-x: auto;
+    }
+    .filter-area::-webkit-scrollbar { display: none; }
+    .product-info-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 16px 12px;
+    }
+    .product-info-bar .product-count {
+      font-size: 12px;
+      color: var(--text-secondary);
+      font-weight: 400;
+    }
+    .product-info-bar .product-sort {
+      font-size: 12px;
+      color: var(--text-secondary);
+      font-weight: 400;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 2px;
+    }
+    .product-grid-wrapper {
+      padding: 0 16px;
+    }
+    .grid-card-img .btn-like {
+      position: absolute;
+      bottom: 6px;
+      right: 6px;
+      padding: 4px;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.15s;
+    }
+    .grid-card-img .btn-like:active { transform: scale(0.9); }
+
+    /* Bottom Sheet Filter */
+    .filter-sheet-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 20px 12px;
+    }
+    .filter-sheet-header .sheet-title {
+      font-size: 16px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .filter-sheet-header .sheet-title .filter-count {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--accent-purple);
+    }
+    .filter-sheet-header .btn-close-sheet {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px;
+      color: var(--text-secondary);
+    }
+    .filter-chips-area {
+      display: flex;
+      gap: 6px;
+      padding: 0 20px 12px;
+      flex-wrap: wrap;
+    }
+    .filter-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      background: rgba(255,255,255,.1);
+      border: 1px solid var(--border-muted);
+      font-size: 11px;
+      color: white;
+      font-weight: 500;
+    }
+    .filter-chip .btn-chip-remove {
+      display: flex;
+      align-items: center;
+      color: var(--text-secondary);
+    }
+    .filter-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0 20px;
+      max-height: 40vh;
+    }
+    .filter-list-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 0;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .filter-list-item .filter-label {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+    }
+    .filter-sheet-footer {
+      display: flex;
+      gap: 12px;
+      padding: 16px 20px;
+      border-top: 1px solid var(--border-default);
+    }
+    .filter-sheet-footer .btn-reset {
+      flex: 1;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      border: 1px solid var(--border-muted);
+      border-radius: 12px;
+    }
+    .filter-sheet-footer .btn-apply {
+      flex: 2;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      color: black;
+      background: white;
+      border-radius: 12px;
+      transition: background 0.15s;
+    }
+    .filter-sheet-footer .btn-apply:hover { background: #e5e5e5; }
+    .color-dot-white {
+      border: 1px solid var(--border-muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <div id="appHeader"></div>
+    <main class="app-main">
+      <!-- 탭 바 -->
+      <div class="brand-tab-bar">
+        <div class="tab-item" data-tab="store">스토어</div>
+        <div class="tab-item active" data-tab="brand">브랜드</div>
+        <div class="tab-item" data-tab="follow">팔로우</div>
+      </div>
+
+      <!-- 필터 영역 -->
+      <div class="filter-area">
+        <button class="category-dropdown-btn" data-filter="color">
+          <span>색상</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        <button class="category-dropdown-btn" data-filter="fit">
+          <span>핏</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        <button class="category-dropdown-btn" data-filter="price">
+          <span>가격</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+      </div>
+
+      <!-- 상품 수 / 정렬 -->
+      <div class="product-info-bar">
+        <span class="product-count">상품 3,487개</span>
+        <span class="product-sort">최신순 ▼</span>
+      </div>
+
+      <!-- 상품 그리드 -->
+      <div class="product-grid-wrapper">
+        <div class="product-grid" id="productGrid">
+        </div>
+      </div>
+    </main>
+    <div id="appBottomNav"></div>
+  </div>
+
+  <!-- 카테고리 필터 바텀시트 -->
+  <div class="modal-overlay" id="filterOverlay"></div>
+  <div class="bottom-sheet sheet-sm" id="filterSheet">
+    <div class="sheet-handle"><div class="sheet-handle-bar"></div></div>
+    <div class="filter-sheet-header">
+      <div class="sheet-title">
+        <span id="filterTitle">색상</span>
+        <span class="filter-count" id="filterCount"></span>
+      </div>
+      <button class="btn-close-sheet" id="btnCloseSheet"></button>
+    </div>
+    <div class="filter-chips-area" id="filterChips"></div>
+    <div class="filter-list" id="filterList"></div>
+    <div class="filter-sheet-footer">
+      <button class="btn-reset" id="btnReset">초기화</button>
+      <button class="btn-apply" id="btnApply">적용하기</button>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/common.js"></script>
+  <script>
+    $(function () {
+      /* 탭 토글 */
+      $('.brand-tab-bar .tab-item').on('click', function () {
+        $('.brand-tab-bar .tab-item').removeClass('active');
+        $(this).addClass('active');
+      });
+
+      /* 상품 데이터 */
+      var products = [
+        { brand: '글래머', name: '오버사이즈 코튼 티셔츠', price: '39,000원' },
+        { brand: '라센느', name: '린넨 블렌드 와이드 팬츠', price: '52,000원' },
+        { brand: '글래머', name: '크롭 카디건 니트', price: '45,000원' },
+        { brand: '라센느', name: '플리츠 미디 스커트', price: '48,000원' },
+        { brand: '글래머', name: '데님 트러커 자켓', price: '78,000원' },
+        { brand: '라센느', name: '스트라이프 셔츠 블라우스', price: '42,000원' },
+        { brand: '글래머', name: '하이웨이스트 슬랙스', price: '55,000원' },
+        { brand: '라센느', name: '캐시미어 블렌드 니트', price: '89,000원' },
+        { brand: '글래머', name: '레더 크로스백', price: '67,000원' }
+      ];
+
+      var gridHtml = '';
+      products.forEach(function (p) {
+        gridHtml += '<div class="grid-product-card">' +
+          '<div class="grid-card-img">' +
+            '<span>IMG</span>' +
+            '<button class="like-btn btn-like" onclick="toggleLike(this)">' + SVG.heart + '</button>' +
+          '</div>' +
+          '<div class="grid-card-info">' +
+            '<span class="grid-card-brand">' + p.brand + '</span>' +
+            '<span class="grid-card-name">' + p.name + '</span>' +
+            '<span class="grid-card-price">' + p.price + '</span>' +
+          '</div>' +
+        '</div>';
+      });
+      $('#productGrid').html(gridHtml);
+
+      /* 필터 데이터 */
+      var filterData = {
+        color: {
+          title: '색상',
+          items: [
+            { label: '블랙', dot: '#000000' },
+            { label: '화이트', dot: '#ffffff' },
+            { label: '그레이', dot: '#808080' },
+            { label: '레드', dot: '#ff0000' },
+            { label: '블루', dot: '#0000ff' },
+            { label: '그린', dot: '#008000' },
+            { label: '아이보리', dot: '#fffff0' },
+            { label: '브라운', dot: '#a52a2a' }
+          ]
+        },
+        fit: {
+          title: '핏',
+          items: [
+            { label: '오버핏' },
+            { label: '레귤러핏' },
+            { label: '슬림핏' },
+            { label: '와이드' }
+          ]
+        },
+        price: {
+          title: '가격',
+          items: [
+            { label: '3만원 이하' },
+            { label: '3~5만원' },
+            { label: '5~10만원' },
+            { label: '10만원 이상' }
+          ]
+        }
+      };
+
+      var currentFilter = '';
+      var selectedFilters = { color: [], fit: [], price: [] };
+
+      /* 닫기 버튼 SVG */
+      $('#btnCloseSheet').html(SVG.x);
+
+      /* 드롭다운 버튼 클릭 */
+      $('.category-dropdown-btn').on('click', function () {
+        currentFilter = $(this).data('filter');
+        openFilterSheet(currentFilter);
+      });
+
+      function openFilterSheet(filterKey) {
+        var data = filterData[filterKey];
+        $('#filterTitle').text(data.title);
+        renderFilterList(filterKey);
+        updateFilterCount(filterKey);
+        renderFilterChips(filterKey);
+        $('#filterOverlay').addClass('show');
+        $('#filterSheet').addClass('show');
+      }
+
+      function closeFilterSheet() {
+        $('#filterOverlay').removeClass('show');
+        $('#filterSheet').removeClass('show');
+      }
+
+      function renderFilterList(filterKey) {
+        var data = filterData[filterKey];
+        var html = '';
+        data.items.forEach(function (item) {
+          var isChecked = selectedFilters[filterKey].indexOf(item.label) !== -1;
+          var dotHtml = '';
+          if (item.dot) {
+            var extraClass = (item.dot === '#ffffff' || item.dot === '#fffff0') ? ' color-dot-white' : '';
+            dotHtml = '<span class="color-dot' + extraClass + '" style="background:' + item.dot + '"></span>';
+          }
+          html += '<div class="filter-list-item" data-label="' + item.label + '">' +
+            '<div class="custom-checkbox' + (isChecked ? ' checked' : '') + '"></div>' +
+            '<span class="filter-label">' + dotHtml + item.label + '</span>' +
+          '</div>';
+        });
+        $('#filterList').html(html);
+      }
+
+      function updateFilterCount(filterKey) {
+        var count = selectedFilters[filterKey].length;
+        $('#filterCount').text(count > 0 ? count + '개 선택' : '');
+      }
+
+      function renderFilterChips(filterKey) {
+        var html = '';
+        selectedFilters[filterKey].forEach(function (label) {
+          html += '<span class="filter-chip" data-label="' + label + '">' +
+            label +
+            '<button class="btn-chip-remove">' + SVG.xSm + '</button>' +
+          '</span>';
+        });
+        $('#filterChips').html(html);
+      }
+
+      /* 필터 항목 클릭 (체크박스 토글) */
+      $(document).on('click', '.filter-list-item', function () {
+        var label = $(this).data('label');
+        var $cb = $(this).find('.custom-checkbox');
+        var idx = selectedFilters[currentFilter].indexOf(label);
+        if (idx !== -1) {
+          selectedFilters[currentFilter].splice(idx, 1);
+          $cb.removeClass('checked');
+        } else {
+          selectedFilters[currentFilter].push(label);
+          $cb.addClass('checked');
+        }
+        updateFilterCount(currentFilter);
+        renderFilterChips(currentFilter);
+      });
+
+      /* 칩 삭제 */
+      $(document).on('click', '.btn-chip-remove', function (e) {
+        e.stopPropagation();
+        var label = $(this).closest('.filter-chip').data('label');
+        var idx = selectedFilters[currentFilter].indexOf(label);
+        if (idx !== -1) {
+          selectedFilters[currentFilter].splice(idx, 1);
+        }
+        renderFilterList(currentFilter);
+        updateFilterCount(currentFilter);
+        renderFilterChips(currentFilter);
+      });
+
+      /* 초기화 */
+      $('#btnReset').on('click', function () {
+        selectedFilters[currentFilter] = [];
+        renderFilterList(currentFilter);
+        updateFilterCount(currentFilter);
+        renderFilterChips(currentFilter);
+      });
+
+      /* 적용하기 */
+      $('#btnApply').on('click', function () {
+        $('.category-dropdown-btn').each(function () {
+          var key = $(this).data('filter');
+          if (selectedFilters[key].length > 0) {
+            $(this).addClass('has-filter');
+            $(this).find('span').first().text(filterData[key].title + ' ' + selectedFilters[key].length);
+          } else {
+            $(this).removeClass('has-filter');
+            $(this).find('span').first().text(filterData[key].title);
+          }
+        });
+        closeFilterSheet();
+      });
+
+      /* 닫기 */
+      $('#btnCloseSheet').on('click', closeFilterSheet);
+      $('#filterOverlay').on('click', closeFilterSheet);
+    });
+  </script>
+</body>
+</html>

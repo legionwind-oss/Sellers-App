@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>배송지 관리</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .view-section {
+      display: none;
+    }
+    .view-section.active {
+      display: block;
+    }
+    .view-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px;
+    }
+    .view-header .view-title {
+      font-size: 17px;
+      font-weight: 700;
+    }
+    .view-header .btn-add {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      color: white;
+      font-size: 13px;
+      font-weight: 500;
+    }
+    .view-header .btn-add svg {
+      width: 16px;
+      height: 16px;
+    }
+    .view-header .btn-cancel-view {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+    .address-card {
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 12px;
+      padding: 16px;
+      margin: 0 16px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .address-card .card-top {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .address-card .address-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: white;
+    }
+    .address-card .badge-default {
+      background: #333;
+      font-size: 9px;
+      font-weight: 600;
+      color: white;
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+    .address-card .card-top-actions {
+      margin-left: auto;
+      display: flex;
+      gap: 8px;
+    }
+    .address-card .card-top-actions button {
+      font-size: 11px;
+      color: var(--text-secondary);
+      transition: color 0.15s;
+    }
+    .address-card .card-top-actions button:hover {
+      color: white;
+    }
+    .address-card .address-detail {
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+    .address-card .address-detail .name-phone {
+      font-size: 13px;
+      font-weight: 500;
+      color: white;
+      margin-bottom: 2px;
+    }
+    .address-card .btn-set-default {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--accent-blue);
+      align-self: flex-start;
+      padding: 4px 0;
+    }
+    .form-area {
+      padding: 0 16px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .form-address-row {
+      display: flex;
+      gap: 8px;
+    }
+    .form-address-row .form-input {
+      flex: 1;
+    }
+    .form-address-row .btn-search-addr {
+      background: #333;
+      color: white;
+      border-radius: 8px;
+      padding: 0 16px;
+      font-size: 12px;
+      font-weight: 600;
+      flex-shrink: 0;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      transition: background 0.15s;
+    }
+    .form-address-row .btn-search-addr:hover {
+      background: #444;
+    }
+    .btn-save {
+      margin: 8px 16px 24px;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <div id="appHeader"></div>
+    <main class="app-main">
+
+      <!-- 목록 뷰 -->
+      <div class="view-section active" id="viewList">
+        <div class="view-header">
+          <span class="view-title">배송지 목록</span>
+          <button class="btn-add" id="btnAdd"></button>
+        </div>
+
+        <div class="address-card">
+          <div class="card-top">
+            <span class="address-name">집</span>
+            <span class="badge-default">기본 배송지</span>
+            <div class="card-top-actions">
+              <button class="btn-edit-addr" data-idx="0">수정</button>
+              <button class="btn-delete-addr">삭제</button>
+            </div>
+          </div>
+          <div class="address-detail">
+            <div class="name-phone">홍길동 (010-1234-5678)</div>
+            서울특별시 강남구 테헤란로 123<br>
+            101동 202호
+          </div>
+        </div>
+
+        <div class="address-card">
+          <div class="card-top">
+            <span class="address-name">회사</span>
+            <div class="card-top-actions">
+              <button class="btn-edit-addr" data-idx="1">수정</button>
+              <button class="btn-delete-addr">삭제</button>
+            </div>
+          </div>
+          <div class="address-detail">
+            <div class="name-phone">홍길동 (010-1234-5678)</div>
+            서울특별시 판교역로 100<br>
+            카카오 1층
+          </div>
+          <button class="btn-set-default">기본 배송지로 설정</button>
+        </div>
+      </div>
+
+      <!-- 추가 뷰 -->
+      <div class="view-section" id="viewAdd">
+        <div class="view-header">
+          <span class="view-title" id="formViewTitle">새 배송지 추가</span>
+          <button class="btn-cancel-view" id="btnCancelAdd">취소</button>
+        </div>
+        <div class="form-area">
+          <div class="form-group">
+            <label class="form-label">배송지명</label>
+            <input type="text" class="form-input" placeholder="예: 집, 회사">
+          </div>
+          <div class="form-group">
+            <label class="form-label">받는 사람</label>
+            <input type="text" class="form-input" placeholder="이름을 입력해주세요.">
+          </div>
+          <div class="form-group">
+            <label class="form-label">연락처</label>
+            <input type="tel" class="form-input" placeholder="010-0000-0000">
+          </div>
+          <div class="form-group">
+            <label class="form-label">주소</label>
+            <div class="form-address-row">
+              <input type="text" class="form-input" placeholder="주소를 검색해주세요." readonly>
+              <button class="btn-search-addr">검색</button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">상세주소</label>
+            <input type="text" class="form-input" placeholder="상세주소를 입력해주세요.">
+          </div>
+        </div>
+        <button class="btn-primary btn-save">저장하기</button>
+      </div>
+
+    </main>
+    <div id="appBottomNav"></div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/common.js"></script>
+  <script>
+    $(function () {
+      $('#btnAdd').html(SVG.plus + ' 추가');
+
+      function showView(viewId) {
+        $('.view-section').removeClass('active');
+        $('#' + viewId).addClass('active');
+      }
+
+      $('#btnAdd').on('click', function () {
+        $('#formViewTitle').text('새 배송지 추가');
+        showView('viewAdd');
+      });
+
+      $('#btnCancelAdd').on('click', function () {
+        showView('viewList');
+      });
+
+      $('.btn-edit-addr').on('click', function () {
+        $('#formViewTitle').text('배송지 수정');
+        showView('viewAdd');
+      });
+
+      $('.btn-delete-addr').on('click', function () {
+        if (confirm('해당 배송지를 삭제하시겠습니까?')) {
+          $(this).closest('.address-card').fadeOut(200);
+        }
+      });
+
+      $('.btn-set-default').on('click', function () {
+        alert('기본 배송지로 설정되었습니다.');
+      });
+
+      $('.btn-save').on('click', function () {
+        alert('저장되었습니다.');
+        showView('viewList');
+      });
+
+      $('.btn-search-addr').on('click', function () {
+        alert('주소 검색 기능은 준비 중입니다.');
+      });
+    });
+  </script>
+</body>
+</html>

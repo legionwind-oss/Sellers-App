@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>협찬/컨택</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .tab-content {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .tab-content-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: white;
+    }
+    .contact-card {
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      gap: 14px;
+    }
+    .contact-card .card-thumb {
+      width: 64px;
+      height: 64px;
+      background: #333;
+      border-radius: 10px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      font-size: 9px;
+      font-weight: 700;
+    }
+    .contact-card .card-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 0;
+    }
+    .contact-card .card-status {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--accent-blue);
+    }
+    .contact-card .card-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: white;
+    }
+    .contact-card .card-date {
+      font-size: 10px;
+      color: #AAAAAA;
+      margin-top: 2px;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <div id="appHeader"></div>
+    <main class="app-main">
+      <div class="tab-bar">
+        <button class="tab-item active" data-tab="request">요청</button>
+        <button class="tab-item" data-tab="approved">승인</button>
+        <button class="tab-item" data-tab="shipping">배송</button>
+        <button class="tab-item" data-tab="complete">완료</button>
+      </div>
+
+      <div class="tab-content" id="tabContent">
+        <span class="tab-content-title" id="tabTitle">요청 내역 (1)</span>
+        <div class="contact-card">
+          <div class="card-thumb">IMG</div>
+          <div class="card-info">
+            <span class="card-status" id="cardStatus">요청 단계</span>
+            <span class="card-title">브랜드 협찬 문의 건</span>
+            <span class="card-date">최근 업데이트: 2026.05.04</span>
+          </div>
+        </div>
+      </div>
+    </main>
+    <div id="appBottomNav"></div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/common.js"></script>
+  <script>
+    $(function () {
+      var tabLabels = {
+        request: '요청',
+        approved: '승인',
+        shipping: '배송',
+        complete: '완료'
+      };
+
+      $('.tab-item').on('click', function () {
+        $('.tab-item').removeClass('active');
+        $(this).addClass('active');
+
+        var tab = $(this).data('tab');
+        var label = tabLabels[tab];
+        $('#tabTitle').text(label + ' 내역 (1)');
+        $('#cardStatus').text(label + ' 단계');
+      });
+    });
+  </script>
+</body>
+</html>

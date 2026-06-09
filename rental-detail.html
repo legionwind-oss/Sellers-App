@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>상품 상세</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .detail-section {
+      padding: 20px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .detail-brand {
+      font-size: 11px;
+      color: var(--text-secondary);
+      font-weight: 400;
+    }
+    .detail-title-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .detail-title {
+      font-size: 17px;
+      font-weight: 700;
+      line-height: 1.3;
+      flex: 1;
+    }
+    .btn-share {
+      width: 36px;
+      height: 36px;
+      background: #222;
+      border: 1px solid #333;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .btn-share svg {
+      width: 9px;
+      height: 9px;
+    }
+    .detail-subtitle {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+    .detail-info-box {
+      margin: 0 16px;
+    }
+    .notice-box {
+      margin: 16px;
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .notice-box .notice-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: white;
+    }
+    .notice-box .notice-item {
+      font-size: 11px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+    }
+    .notice-box .notice-item::before {
+      content: '•';
+      flex-shrink: 0;
+      color: var(--text-muted);
+    }
+    .detail-image-area {
+      margin: 16px;
+      height: 400px;
+      background: #171717;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      font-size: 14px;
+      font-weight: 500;
+    }
+    .bottom-bar-buy {
+      flex: 1;
+      height: 52px;
+      background: #222;
+      border: 1px solid #333;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      color: white;
+    }
+    .bottom-bar-rent {
+      flex: 1.5;
+      height: 52px;
+      background: white;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-size: 14px;
+      font-weight: 900;
+      color: black;
+      box-shadow: 0 8px 20px rgba(0,0,0,.5);
+    }
+    .bottom-bar-rent:hover {
+      background: #e5e5e5;
+    }
+    .bottom-bar-rent .rent-price {
+      font-size: 12px;
+      font-weight: 500;
+      color: #555;
+    }
+    .dialog-title {
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .dialog-desc {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+    .dialog-btns {
+      display: flex;
+      gap: 10px;
+    }
+    .dialog-btns .btn-cancel {
+      flex: 1;
+      height: 48px;
+      background: #222;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 600;
+      color: white;
+    }
+    .dialog-btns .btn-confirm {
+      flex: 1;
+      height: 48px;
+      background: white;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 900;
+      color: black;
+    }
+    .dialog-btns .btn-confirm:hover {
+      background: #e5e5e5;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <div id="appHeader"></div>
+    <main class="app-main detail-page">
+      <div class="detail-hero" id="detailHero">IMG</div>
+
+      <div class="detail-section">
+        <span class="detail-brand" id="detailBrand"></span>
+        <div class="detail-title-row">
+          <h2 class="detail-title" id="detailTitle"></h2>
+          <button class="btn-share" id="btnShare"></button>
+        </div>
+        <p class="detail-subtitle">시즌 한정 대여 상품입니다.</p>
+      </div>
+
+      <div class="detail-info-box">
+        <div class="info-box">
+          <div class="info-row">
+            <span class="info-label">대여료</span>
+            <span class="info-value">0원</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">잔여수량</span>
+            <span class="info-value">1/1개</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">대여 가능 옵션</span>
+            <span class="info-value">One Size (F)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="notice-box">
+        <span class="notice-title">안내사항</span>
+        <div class="notice-item">대여기간은 수령일로부터 7일입니다.</div>
+        <div class="notice-item">조기반납은 불가합니다.</div>
+        <div class="notice-item">제품 파손 및 오염 시 배상 책임이 있습니다.</div>
+      </div>
+
+      <div class="detail-image-area">상세 이미지 영역</div>
+    </main>
+
+    <div class="detail-bottom-bar">
+      <button class="detail-btn-like like-btn" onclick="toggleLike(this)">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.04 3 5.5l7 7Z"/></svg>
+      </button>
+      <button class="bottom-bar-buy">구매하기</button>
+      <button class="bottom-bar-rent" id="btnRent">
+        대여신청
+        <span class="rent-price">3,000P</span>
+      </button>
+    </div>
+
+    <div class="dialog-overlay" id="rentDialog">
+      <div class="dialog-box">
+        <h3 class="dialog-title">대여 신청 안내</h3>
+        <p class="dialog-desc">
+          대여 신청 시 보증금 <strong>3,000P</strong>가 차감됩니다.<br>
+          반납 완료 후 보증금은 자동으로 환불됩니다.
+        </p>
+        <div class="dialog-btns">
+          <button class="btn-cancel" id="dialogClose">닫기</button>
+          <button class="btn-confirm" id="dialogConfirm">신청하기</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="appBottomNav"></div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/common.js"></script>
+  <script>
+    $(function () {
+      var params = new URLSearchParams(location.search);
+      var id = parseInt(params.get('id')) || 1;
+
+      var brand = 'DM_L_디몬스터';
+      if (id % 2 === 0) brand = '글래머';
+      else if (id % 3 === 0) brand = '라센느';
+
+      $('#detailBrand').text(brand);
+      $('#detailTitle').text('테스트 대여상품 니트/자켓 ' + id);
+      $('#btnShare').html(SVG.send);
+
+      $('#btnRent').on('click', function () {
+        $('#rentDialog').addClass('show');
+      });
+      $('#dialogClose').on('click', function () {
+        $('#rentDialog').removeClass('show');
+      });
+      $('#dialogConfirm').on('click', function () {
+        $('#rentDialog').removeClass('show');
+        alert('대여 신청이 완료되었습니다.');
+      });
+      $('#rentDialog').on('click', function (e) {
+        if (e.target === this) $(this).removeClass('show');
+      });
+    });
+  </script>
+</body>
+</html>
